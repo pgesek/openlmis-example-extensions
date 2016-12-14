@@ -1,0 +1,11 @@
+version: "2"
+services:
+
+  example-extensions:
+    image: openlmis/example-extensions
+    volumes:
+      - 'extensions:/extensions'
+
+volumes:
+  extensions:
+    external: false
