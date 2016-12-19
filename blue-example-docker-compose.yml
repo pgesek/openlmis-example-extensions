@@ -1,0 +1,112 @@
+version: "2"
+services:
+
+  consul:
+    command: -server -bootstrap
+    image: gliderlabs/consul-server
+    ports:
+      - "8300"
+      - "8400"
+      - "8500:8500"
+      - "53"
+
+  nginx:
+    image: openlmis/nginx
+    ports:
+      - "80:80"
+    env_file: .env
+    volumes:
+      - 'nginx-log:/var/log/nginx'
+      - 'consul-template-log:/var/log/consul-template'
+    depends_on: [consul]
+
+  requisition-refui:
+    image: openlmis/requisition-refui:3.0.0-SNAPSHOT
+    env_file: .env
+
+  requisition:
+    image: openlmis/requisition:3.0.0-SNAPSHOT
+    env_file: .env
+    environment:
+      JAVA_OPTS: '-Dlogging.config=/logback.xml -Dspring.jpa.properties.hibernate.hbm2ddl.import_files=/bootstrap.sql,file:///demo-data/data.sql'
+    volumes:
+      - './logback.xml:/logback.xml'
+    depends_on: [log]
+
+  referencedata:
+    image: openlmis/referencedata:3.0.0-SNAPSHOT
+    env_file: .env
+    environment:
+      JAVA_OPTS: '-Dlogging.config=/logback.xml -Dspring.jpa.properties.hibernate.hbm2ddl.import_files=/bootstrap.sql,file:///demo-data/data.sql'
+    volumes:
+      - './logback.xml:/logback.xml'
+    depends_on: [log]
+
+  auth:
+    image: openlmis/auth:3.0.0-SNAPSHOT
+    env_file: .env
+    environment:
+      JAVA_OPTS: '-Dlogging.config=/logback.xml -Dspring.jpa.properties.hibernate.hbm2ddl.import_files=/bootstrap.sql,file:///demo-data/data.sql'
+    volumes:
+      - './logback.xml:/logback.xml'
+    depends_on: [log]
+
+  notification:
+    image: openlmis/notification:3.0.0-SNAPSHOT
+    env_file: .env
+    environment:
+      JAVA_OPTS: '-Dlogging.config=/logback.xml'
+    volumes:
+      - './logback.xml:/logback.xml'
+    depends_on: [log]
+
+  fulfillment:
+    image: openlmis/fulfillment:3.0.0-SNAPSHOT
+    env_file: .env
+    environment:
+      JAVA_OPTS: '-Dlogging.config=/logback.xml -Dspring.jpa.properties.hibernate.hbm2ddl.import_files=/bootstrap.sql,file:///demo-data/data.sql'
+    volumes:
+      - './logback.xml:/logback.xml'
+    depends_on: [log]
+
+  example-extensions:
+    image: openlmis/openlmis-example-extensions:0.0.1-SNAPSHOT
+    volumes:
+      - 'example-extensions:/extensions'
+
+  example:
+    image: openlmis/example:latest
+    env_file: .env
+    environment:
+      JAVA_OPTS: '-Dlogging.config=/logback.xml'
+    volumes:
+      - 'example-extensions:/extensions'
+      - './logback.xml:/logback.xml'
+    depends_on: [log, example-extensions]
+
+  db:
+    image: openlmis/postgres
+    env_file: .env
+    depends_on: [consul]
+
+  log:
+    image: openlmis/rsyslog
+    volumes:
+      - '../logs/requisition:/var/log'
+    depends_on: [consul]
+
+  ftp:
+    image: hauptmedia/proftpd
+    ports:
+      - "21:21"
+      - "20:20"
+    env_file: .env
+    depends_on: [consul]
+
+volumes:
+  nginx-log:
+    external: false
+  consul-template-log:
+    external: false
+  example-extensions:
+    external: false
