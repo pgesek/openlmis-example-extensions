@@ -1,7 +1,7 @@
 version: "2"
 services:
 
-  example-extensions:
+  openlmis-example-extensions:
     image: openlmis/dev
     volumes:
       - '.:/app'

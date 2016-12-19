@@ -12,4 +12,4 @@ services:
 
   image:
     build: .
-    image: openlmis/example-extensions
+    image: openlmis/openlmis-example-extensions
