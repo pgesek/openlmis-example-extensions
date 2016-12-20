@@ -3,19 +3,33 @@ This example is a Docker image containing extensions of openlmis-example service
 
 
 ## Quick start
+1. Fork/clone this repository from GitHub.
+ ```shell
+ git clone https://github.com/OpenLMIS/openlmis-example-extensions.git
+ ```
+2. Add an environment file called `.env` to the root folder of the project, with the required 
+project settings and credentials. For a starter environment file, you can use [this 
+one](https://github.com/OpenLMIS/openlmis-config/blob/master/.env).
+3. Start up the application.
+ ```shell
+ docker-compose -f blue-example-docker-compose.yml up
+ ```
+4. Go to `http://<yourDockerIPAdress>/api/extensionPoint` to see
+that the extended implementation of OrderQuantity interface is used. See [Adding extension points](#extensionpoints).
+
+
+## Integration with openlmis-blue
 1. Fork/clone `openlmis-blue` repository from GitHub.
  ```shell
  git clone https://github.com/OpenLMIS/openlmis-blue.git
  ```
 2. Replace the contents of blue's docker-compose.yml with blue-example-docker-compose.yml from this repository. 
 See [Configuring blue](#configuringblue).
-3. Start up openlmis-blue
+3. Start up openlmis-blue.
  ```shell
  docker-compose up
  ```
-4. Go to `http://<yourDockerIPAdress>/api/extensionPoint` to see
-that the extended implementation of OrderQuantity interface is used. See [Adding extension points](#extensionpoints)
-
+ 
 ## <a name="extensionpoints">Adding extension points</a>
 1. Add extension to the "dependencies" configuration in build.gradle:
 ```
