@@ -1,5 +1,5 @@
 # OpenLMIS Example Extensions
-This example is a Docker image containing extensions of openlmis-example service. It is meant to demonstrate how extensions are added to openlmis-blue.
+This example is a Docker image containing extensions of openlmis-example service. It is meant to demonstrate how extensions are added to openlmis-ref-distro.
 
 
 ## Quick start
@@ -12,20 +12,20 @@ project settings and credentials. For a starter environment file, you can use [t
 one](https://github.com/OpenLMIS/openlmis-config/blob/master/.env).
 3. Start up the application.
  ```shell
- docker-compose -f blue-example-docker-compose.yml up
+ docker-compose -f ref-distro-example-docker-compose.yml up
  ```
 4. Go to `http://<yourDockerIPAdress>/api/extensionPoint` to see
 that the extended implementation of OrderQuantity interface is used. See [Adding extension points](#extensionpoints).
 
 
-## Integration with openlmis-blue
-1. Fork/clone `openlmis-blue` repository from GitHub.
+## Integration with openlmis-ref-distro
+1. Fork/clone `openlmis-ref-distro` repository from GitHub.
  ```shell
- git clone https://github.com/OpenLMIS/openlmis-blue.git
+ git clone https://github.com/OpenLMIS/openlmis-ref-distro.git
  ```
-2. Replace the contents of blue's docker-compose.yml with blue-example-docker-compose.yml from this repository. 
-See [Configuring blue](#configuringblue).
-3. Start up openlmis-blue.
+2. Replace the contents of the Reference Distribution's docker-compose.yml with ref-distro-example-docker-compose.yml from this repository. 
+See [Configuring the Reference Distribution](#configuringrefdistro).
+3. Start up openlmis-ref-distro.
  ```shell
  docker-compose up
  ```
@@ -41,8 +41,8 @@ See [Configuring blue](#configuringblue).
 ```
 
 
-## <a name="configuringblue">Configuring openlmis-blue</a>
-Blue is configured to use extension modules by defining a named volume that is common to the service and partner image. 
+## <a name="configuringrefdistro">Configuring openlmis-ref-distro</a>
+The Reference Distribution is configured to use extension modules by defining a named volume that is common to the service and partner image. 
 ```
 volumes:
   example-extensions:
@@ -50,4 +50,4 @@ volumes:
 ```
 The shared volume contains extension jars and extension point configuration. The role of this image is to copy them at startup so they may be read by the service.
 
-An example configuration can be found in `blue-example-docker-compose.yml`.
+An example configuration can be found in `ref-distro-example-docker-compose.yml`.
