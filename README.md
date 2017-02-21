@@ -37,7 +37,7 @@ See [Configuring the Reference Distribution](#configuringrefdistro).
 ```
 2. Modify extensions.properties with name of the extended component.
 ```
-    OrderQuantity=AMCOrderQuantity
+    OrderQuantity=AmcOrderQuantity
 ```
 
 
